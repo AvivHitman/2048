@@ -211,7 +211,7 @@ class Game(tk.Frame):
         self.update_GUI()
         self.game_over()
 
-
+    # click on space to udo
     def undo(self, event):
         key = event.char
         print(key, 'is pressed')
