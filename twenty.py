@@ -12,6 +12,10 @@ class Game(tk.Frame):
         self.main_grid = tk.Frame(
             self, bg=c.GRID_COLOR, bd=3, width=400, height=400)
         self.main_grid.grid(pady=(80, 0))
+
+        button = tk.Button(self, text="UNDO", command=self.undo)
+        button.grid(row=1, column=0)
+
         self.make_GUI()
         self.start_game()
 
@@ -19,7 +23,6 @@ class Game(tk.Frame):
         self.master.bind("<Right>", self.right)
         self.master.bind("<Up>", self.up)
         self.master.bind("<Down>", self.down)
-        self.master.bind("<Key>", self.undo)
 
         self.mainloop()
 
@@ -212,9 +215,7 @@ class Game(tk.Frame):
         self.game_over()
 
 
-    def undo(self, event):
-        key = event.char
-        print(key, 'is pressed')
+    def undo(self):
         self.score = self.scor_undo
         self.matrix = self.matrix_undo
         self.update_GUI()
