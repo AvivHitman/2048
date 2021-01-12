@@ -2,17 +2,21 @@ import tkinter as tk
 from tkinter import ttk
 import random
 import colors as c
+from tkinter import *
+from tkinter.ttk import *
 
 LARGEFONT = ("Verdana", 35)
-
+master = Tk()
 
 class tkinterApp(tk.Tk):
 
     # __init__ function for class tkinterApp  
     def __init__(self, *args, **kwargs):
         # __init__ function for class Tk
-        tk.Tk.__init__(self, *args, **kwargs)
-        container = tk.Frame(self)
+        #tk.Tk.__init__(self, *args, **kwargs)
+        newWindow = Toplevel(master)
+        newWindow.title("New Window")
+        container = tk.Frame(newWindow)
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
@@ -72,13 +76,13 @@ class Page2(tk.Frame):
         button = tk.Button(self, text="UNDO", command=self.undo)
         button.grid(row=2, column=0)
         button1 = tk.Button(self, text="LEFT", command=self.left)
-        button1.grid(row=2, column=1)
+        button1.grid(row=3, column=1)
         button2 = tk.Button(self, text="RIGHT", command=self.right)
-        button2.grid(row=2, column=2)
+        button2.grid(row=3, column=2)
         button3 = tk.Button(self, text="UP", command=self.up)
-        button3.grid(row=2, column=3)
+        button3.grid(row=3, column=3)
         button4 = tk.Button(self, text="DOWN", command=self.down)
-        button4.grid(row=2, column=4)
+        button4.grid(row=3, column=4)
 
         self.make_GUI()
         self.start_game()
@@ -309,5 +313,31 @@ class Page2(tk.Frame):
                 font=c.GAME_OVER_FONT).pack()
 
 
-app = tkinterApp()
-app.mainloop() 
+master = Tk()
+master.geometry("200x200")
+
+
+# function to open a new window
+# on a button click
+def openNewWindow():
+    newWindow = Toplevel(master)
+    newWindow.title("New Window")
+    newWindow.geometry("200x200")
+    Label(newWindow,
+          text="This is a new window").pack()
+
+
+label = Label(master,
+              text="This is the main window")
+label.pack(pady=10)
+
+btn = Button(master,
+             text="Click to open a new window",
+             command=tkinterApp())
+btn.pack(pady=10)
+
+# mainloop, runs infinitely
+mainloop()
+
+# app = tkinterApp()
+# app.mainloop()

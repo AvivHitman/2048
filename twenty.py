@@ -82,7 +82,8 @@ class Game(tk.Frame):
             font=c.CELL_NUMBER_FONTS[2],
             text="2")
         self.score = 0
-        self.matrix_undo = self.matrix
+        self.matrix_undo =[]
+        self.matrix_undo.append(self.matrix)
         self.scor_undo = self.score
 
 
@@ -161,7 +162,7 @@ class Game(tk.Frame):
     # Arrow-Press Functions
 
     def left(self, event):
-        self.matrix_undo = self.matrix
+        self.matrix_undo.append(self.matrix)
         self.scor_undo = self.score
         self.stack()
         self.combine()
@@ -172,7 +173,7 @@ class Game(tk.Frame):
 
 
     def right(self, event):
-        self.matrix_undo = self.matrix
+        self.matrix_undo.append(self.matrix)
         self.scor_undo = self.score
         self.reverse()
         self.stack()
@@ -185,7 +186,7 @@ class Game(tk.Frame):
 
 
     def up(self, event):
-        self.matrix_undo = self.matrix
+        self.matrix_undo.append(self.matrix)
         self.scor_undo = self.score
         self.transpose()
         self.stack()
@@ -199,7 +200,7 @@ class Game(tk.Frame):
 
 
     def down(self, event):
-        self.matrix_undo = self.matrix
+        self.matrix_undo.append(self.matrix)
         self.scor_undo = self.score
         self.transpose()
         self.reverse()
@@ -215,7 +216,7 @@ class Game(tk.Frame):
 
     def undo(self):
         self.score = self.scor_undo
-        self.matrix = self.matrix_undo
+        self.matrix = self.matrix_undo.pop()
         self.update_GUI()
         self.game_over()
 
