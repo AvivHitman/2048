@@ -215,10 +215,11 @@ class Game(tk.Frame):
 
 
     def undo(self):
-        self.score = self.scor_undo
-        self.matrix = self.matrix_undo.pop()
-        self.update_GUI()
-        self.game_over()
+        if len(self.matrix_undo) > 1:
+            self.score = self.scor_undo
+            self.matrix = self.matrix_undo.pop()
+            self.update_GUI()
+            self.game_over()
 
 
     # Check if any moves are possible
