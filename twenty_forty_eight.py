@@ -1,20 +1,84 @@
 import tkinter as tk
+from tkinter import ttk
 import random
 import colors as c
 
+LARGEFONT = ("Verdana", 35)
 
-class Game(tk.Frame):
-    def __init__(self):
-        tk.Frame.__init__(self)
+
+class tkinterApp(tk.Tk):
+
+    # __init__ function for class tkinterApp  
+    def __init__(self, *args, **kwargs):
+        # __init__ function for class Tk
+        tk.Tk.__init__(self, *args, **kwargs)
+        container = tk.Frame(self)
+        container.pack(side="top", fill="both", expand=True)
+        container.grid_rowconfigure(0, weight=1)
+        container.grid_columnconfigure(0, weight=1)
+        self.frames = {}
+        for F in (StartPage, Page2):
+            frame = F(container, self)
+            self.frames[F] = frame
+
+            frame.grid(row=0, column=0, sticky="nsew")
+
+        self.show_frame(StartPage)
+
+
+    # parameter
+    def show_frame(self, cont):
+        frame = self.frames[cont]
+        frame.tkraise()
+
+    # first window frame startpage
+
+
+class StartPage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+
+        # label of frame Layout 2 
+        label = ttk.Label(self, text="Startpage", font=LARGEFONT)
+
+        # putting the grid in its place by using 
+        # grid 
+        label.grid(row=0, column=4, padx=10, pady=10)
+
+
+        ## button to show frame 2 with text layout2 
+        button2 = ttk.Button(self, text="Start Game",
+                             command=lambda: controller.show_frame(Page2))
+
+        # putting the button in its place by 
+        # using grid 
+        button2.grid(row=2, column=1, padx=10, pady=10)
+
+    # second window frame page1
+
+
+class Page2(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
         self.grid()
-        self.master.title('2048')
+        label = ttk.Label(self, text="Game", font=LARGEFONT)
+        label.grid(row=0, column=4, padx=10, pady=10)
+       # self.master.title('2048')
 
         self.main_grid = tk.Frame(
             self, bg=c.GRID_COLOR, bd=3, width=400, height=400)
         self.main_grid.grid(pady=(80, 0))
 
         button = tk.Button(self, text="UNDO", command=self.undo)
-        button.grid(row=1, column=0)
+        button.grid(row=2, column=0)
+        button1 = tk.Button(self, text="LEFT", command=self.left)
+        button1.grid(row=2, column=1)
+        button2 = tk.Button(self, text="RIGHT", command=self.right)
+        button2.grid(row=2, column=2)
+        button3 = tk.Button(self, text="UP", command=self.up)
+        button3.grid(row=2, column=3)
+        button4 = tk.Button(self, text="DOWN", command=self.down)
+        button4.grid(row=2, column=4)
 
         self.make_GUI()
         self.start_game()
@@ -24,8 +88,7 @@ class Game(tk.Frame):
         self.master.bind("<Up>", self.up)
         self.master.bind("<Down>", self.down)
 
-        self.mainloop()
-
+        #self.mainloop()
 
     def make_GUI(self):
         # make grid
@@ -56,7 +119,6 @@ class Game(tk.Frame):
         self.score_label = tk.Label(score_frame, text="0", font=c.SCORE_FONT)
         self.score_label.grid(row=1)
 
-
     def start_game(self):
         # create matrix of zeroes
         self.matrix = [[0] * 4 for _ in range(4)]
@@ -71,7 +133,7 @@ class Game(tk.Frame):
             fg=c.CELL_NUMBER_COLORS[2],
             font=c.CELL_NUMBER_FONTS[2],
             text="2")
-        while(self.matrix[row][col] != 0):
+        while (self.matrix[row][col] != 0):
             row = random.randint(0, 3)
             col = random.randint(0, 3)
         self.matrix[row][col] = 2
@@ -85,8 +147,7 @@ class Game(tk.Frame):
         self.matrix_undo = self.matrix
         self.scor_undo = self.score
 
-
-    # Matrix Manipulation Functions
+        # Matrix Manipulation Functions
 
     def stack(self):
         new_matrix = [[0] * 4 for _ in range(4)]
@@ -98,7 +159,6 @@ class Game(tk.Frame):
                     fill_position += 1
         self.matrix = new_matrix
 
-
     def combine(self):
         for i in range(4):
             for j in range(3):
@@ -106,7 +166,6 @@ class Game(tk.Frame):
                     self.matrix[i][j] *= 2
                     self.matrix[i][j + 1] = 0
                     self.score += self.matrix[i][j]
-
 
     def reverse(self):
         new_matrix = []
@@ -116,7 +175,6 @@ class Game(tk.Frame):
                 new_matrix[i].append(self.matrix[i][3 - j])
         self.matrix = new_matrix
 
-
     def transpose(self):
         new_matrix = [[0] * 4 for _ in range(4)]
         for i in range(4):
@@ -124,19 +182,17 @@ class Game(tk.Frame):
                 new_matrix[i][j] = self.matrix[j][i]
         self.matrix = new_matrix
 
-
-    # Add a new 2 or 4 tile randomly to an empty cell
+        # Add a new 2 or 4 tile randomly to an empty cell
 
     def add_new_tile(self):
         row = random.randint(0, 3)
         col = random.randint(0, 3)
-        while(self.matrix[row][col] != 0):
+        while (self.matrix[row][col] != 0):
             row = random.randint(0, 3)
             col = random.randint(0, 3)
         self.matrix[row][col] = random.choice([2, 4])
 
-
-    # Update the GUI to match the matrix
+        # Update the GUI to match the matrix
 
     def update_GUI(self):
         for i in range(4):
@@ -157,10 +213,9 @@ class Game(tk.Frame):
         self.score_label.configure(text=self.score)
         self.update_idletasks()
 
+        # Arrow-Press Functions
 
-    # Arrow-Press Functions
-
-    def left(self, event):
+    def left(self):
         self.matrix_undo = self.matrix
         self.scor_undo = self.score
         self.stack()
@@ -170,8 +225,7 @@ class Game(tk.Frame):
         self.update_GUI()
         self.game_over()
 
-
-    def right(self, event):
+    def right(self):
         self.matrix_undo = self.matrix
         self.scor_undo = self.score
         self.reverse()
@@ -183,8 +237,7 @@ class Game(tk.Frame):
         self.update_GUI()
         self.game_over()
 
-
-    def up(self, event):
+    def up(self):
         self.matrix_undo = self.matrix
         self.scor_undo = self.score
         self.transpose()
@@ -196,9 +249,7 @@ class Game(tk.Frame):
         self.update_GUI()
         self.game_over()
 
-
-
-    def down(self, event):
+    def down(self):
         self.matrix_undo = self.matrix
         self.scor_undo = self.score
         self.transpose()
@@ -211,7 +262,6 @@ class Game(tk.Frame):
         self.add_new_tile()
         self.update_GUI()
         self.game_over()
-
 
     def undo(self):
         self.score = self.scor_undo
@@ -219,8 +269,7 @@ class Game(tk.Frame):
         self.update_GUI()
         self.game_over()
 
-
-    # Check if any moves are possible
+        # Check if any moves are possible
 
     def horizontal_move_exists(self):
         for i in range(4):
@@ -229,7 +278,6 @@ class Game(tk.Frame):
                     return True
         return False
 
-
     def vertical_move_exists(self):
         for i in range(3):
             for j in range(4):
@@ -237,8 +285,7 @@ class Game(tk.Frame):
                     return True
         return False
 
-
-    # Check if Game is Over (Win/Lose)
+        # Check if Game is Over (Win/Lose)
 
     def game_over(self):
         if any(2048 in row for row in self.matrix):
@@ -250,7 +297,8 @@ class Game(tk.Frame):
                 bg=c.WINNER_BG,
                 fg=c.GAME_OVER_FONT_COLOR,
                 font=c.GAME_OVER_FONT).pack()
-        elif not any(0 in row for row in self.matrix) and not self.horizontal_move_exists() and not self.vertical_move_exists():
+        elif not any(0 in row for row in
+                     self.matrix) and not self.horizontal_move_exists() and not self.vertical_move_exists():
             game_over_frame = tk.Frame(self.main_grid, borderwidth=2)
             game_over_frame.place(relx=0.5, rely=0.5, anchor="center")
             tk.Label(
@@ -261,9 +309,5 @@ class Game(tk.Frame):
                 font=c.GAME_OVER_FONT).pack()
 
 
-def main():
-    Game()
-
-
-if __name__ == "__main__":
-    main()
+app = tkinterApp()
+app.mainloop() 
