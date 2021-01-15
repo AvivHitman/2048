@@ -68,7 +68,7 @@ class Page2(tk.Frame):
         self.grid()
         label = ttk.Label(self, text="Game", font=LARGEFONT)
         label.grid(row=0, column=4, padx=10, pady=10)
-       # self.master.title('2048')
+       # self.title('2048')
 
         self.main_grid = tk.Frame(
             self, bg=c.GRID_COLOR, bd=3, width=400, height=400)

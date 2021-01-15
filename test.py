@@ -6,28 +6,54 @@ import colors as c
 
 LARGEFONT = ("Verdana", 35)
 
-class Page2(tk.Frame):
+
+class Game(tk.Frame):
+    _instance = None
+
     def __init__(self, parent, controller):
+        if Game._instance is None:
+            Game._instance = self
+        else:
+            raise Exception("You cannot create another SingletonGovt class")
+
         tk.Frame.__init__(self, parent)
         self.grid()
-        label = ttk.Label(self, text="Game", font=LARGEFONT)
-        label.grid(row=0, column=4, padx=10, pady=10)
-       # self.master.title('2048')
+        self.master.title('2048')
 
         self.main_grid = tk.Frame(
             self, bg=c.GRID_COLOR, bd=3, width=400, height=400)
-        self.main_grid.grid(pady=(80, 0))
+        self.main_grid.grid(pady=(90, 20))
 
-        button = tk.Button(self, text="UNDO", command=self.undo)
-        button.grid(row=2, column=0)
-        button1 = tk.Button(self, text="LEFT", command=self.left)
-        button1.grid(row=2, column=1)
-        button2 = tk.Button(self, text="RIGHT", command=self.right)
-        button2.grid(row=2, column=2)
-        button3 = tk.Button(self, text="UP", command=self.up)
-        button3.grid(row=2, column=3)
-        button4 = tk.Button(self, text="DOWN", command=self.down)
-        button4.grid(row=2, column=4)
+        button_frame = tk.Frame(self)
+        button_frame.place(relx=0.5, y=500, anchor="center")
+        button_frame.grid_configure(pady=5)
+
+        self.left_button = tk.Button(button_frame, text="left", command=self.left, bg=c.CELL_COLORS[2])
+        self.left_button.grid(row=1, column=0)
+        self.left_button.grid_configure(padx=10)
+        self.left_button.config(height=1, width=5)
+
+        self.right_button = tk.Button(button_frame, text="right", command=self.right, bg=c.CELL_COLORS[2])
+        self.right_button.grid(row=1, column=4)
+        self.right_button.grid_configure(padx=10)
+        self.right_button.config(height=1, width=5)
+
+        self.up_button = tk.Button(button_frame, text="up", command=self.up, bg=c.CELL_COLORS[2])
+        self.up_button.grid(row=0, column=2)
+        self.up_button.grid_configure(padx=10)
+        self.up_button.config(height=1, width=5)
+
+        self.down_button = tk.Button(button_frame, text="down", command=self.down, bg=c.CELL_COLORS[2])
+        self.down_button.grid(row=1, column=2)
+        self.down_button.grid_configure(padx=10, pady=10)
+        self.down_button.config(height=1, width=5)
+
+        undo_frame = tk.Frame(self)
+        undo_frame.place(x=400, y=50, anchor="center")
+
+        self.undo_button = tk.Button(undo_frame, text="undo", command=self.undo,  bg=c.CELL_COLORS[2])
+        self.undo_button.config(height=1, width=5)
+        self.undo_button.grid_configure(padx=10, pady=10)
 
         self.make_GUI()
         self.start_game()
@@ -37,7 +63,6 @@ class Page2(tk.Frame):
         self.master.bind("<Up>", self.up)
         self.master.bind("<Down>", self.down)
 
-        #self.mainloop()
 
     def make_GUI(self):
         # make grid
@@ -64,9 +89,10 @@ class Page2(tk.Frame):
             score_frame,
             text="Score",
             font=c.SCORE_LABEL_FONT).grid(
-            row=0)
+            row=0, column=0)
         self.score_label = tk.Label(score_frame, text="0", font=c.SCORE_FONT)
         self.score_label.grid(row=1)
+
 
     def start_game(self):
         # create matrix of zeroes
@@ -262,18 +288,21 @@ class Welcome(tk.Frame):
     def __init__(self, master):
         self.master = master
         self.frame = tk.Frame(self.master)
-
+        self.master.title('2048')
         tk.Frame.__init__(self)
+        self.main_grid = tk.Frame(
+            self, bg=c.GRID_COLOR, bd=5, width=400, height=400)
+        self.main_grid.grid(pady=(0, 0))
         self.grid()
-        button1 = tk.Button(self, text='New Window',  command=lambda: self.new_window())
+        button1 = tk.Button(self, text='New Game',  command=lambda: self.new_window())
         button1.grid(row=0, column=0, padx=10, pady=10)
+        button1.config(height=2, width=15)
 
     def new_window(self):
         # self.newWindow = tk.Frame(self.master)
         # self.app = Page2(self.newWindow, self)
-
         newWindow = tk.Toplevel(self.master)
-        frame = Page2(newWindow, self)
+        frame = Game(newWindow, self)
         frame.tkraise()
 
 
