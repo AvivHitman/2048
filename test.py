@@ -15,7 +15,8 @@ class Game(tk.Frame):
             Game._instance = self
         else:
             raise Exception("You cannot create another Singleton class")
-
+        self.score_undo = []
+        self.matrix_undo = []
         tk.Frame.__init__(self, parent)
         self.grid()
         self.master.title('2048')
@@ -91,6 +92,7 @@ class Game(tk.Frame):
 
     def start_game(self):
         # create matrix of zeroes
+
         self.matrix = [[0] * 4 for _ in range(4)]
 
         # fill 2 random cells with 2s
@@ -114,9 +116,8 @@ class Game(tk.Frame):
             font=c.CELL_NUMBER_FONTS[2],
             text="2")
         self.score = 0
-        self.matrix_undo = []
         self.matrix_undo.append(self.matrix)
-        self.scor_undo = self.score
+        self.score_undo.append(self.score)
 
         # Matrix Manipulation Functions
 
@@ -188,7 +189,7 @@ class Game(tk.Frame):
 
     def left(self):
         self.matrix_undo.append(self.matrix)
-        self.scor_undo = self.score
+        self.score_undo.append(self.score)
         self.stack()
         self.combine()
         self.stack()
@@ -198,7 +199,7 @@ class Game(tk.Frame):
 
     def right(self):
         self.matrix_undo.append(self.matrix)
-        self.scor_undo = self.score
+        self.score_undo.append(self.score)
         self.reverse()
         self.stack()
         self.combine()
@@ -210,7 +211,7 @@ class Game(tk.Frame):
 
     def up(self):
         self.matrix_undo.append(self.matrix)
-        self.scor_undo = self.score
+        self.score_undo.append(self.score)
         self.transpose()
         self.stack()
         self.combine()
@@ -222,7 +223,7 @@ class Game(tk.Frame):
 
     def down(self):
         self.matrix_undo.append(self.matrix)
-        self.scor_undo = self.score
+        self.score_undo.append(self.score)
         self.transpose()
         self.reverse()
         self.stack()
@@ -236,7 +237,7 @@ class Game(tk.Frame):
 
     def undo(self):
         if len(self.matrix_undo) > 1:
-            self.score = self.scor_undo
+            self.score = self.score_undo.pop()
             self.matrix = self.matrix_undo.pop()
             self.update_GUI()
             self.game_over()
