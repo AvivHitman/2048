@@ -14,7 +14,7 @@ class Game(tk.Frame):
         if Game._instance is None:
             Game._instance = self
         else:
-            raise Exception("You cannot create another SingletonGovt class")
+            raise Exception("You cannot create another Singleton class")
 
         tk.Frame.__init__(self, parent)
         self.grid()
@@ -285,6 +285,8 @@ class Game(tk.Frame):
 
 
 class Welcome(tk.Frame):
+    flag = 0
+    newWindow = None
     def __init__(self, master):
         self.master = master
         self.frame = tk.Frame(self.master)
@@ -298,13 +300,25 @@ class Welcome(tk.Frame):
         button1.grid(row=0, column=0, padx=10, pady=10)
         button1.config(height=2, width=15)
 
-    def new_window(self):
-        # self.newWindow = tk.Frame(self.master)
-        # self.app = Page2(self.newWindow, self)
-        newWindow = tk.Toplevel(self.master)
-        frame = Game(newWindow, self)
-        frame.tkraise()
 
+
+    def new_window(self):
+        try:
+            if (self.flag  == 0):
+                self.newWindow = tk.Toplevel(self.master)
+                frame = Game(self.newWindow, self)
+                frame.tkraise()
+
+
+        except:
+            print("ggg")
+            self.flag = 1
+            #self.newWindow = tk.Toplevel(self.master)
+            error = tk.Frame(self.new_window())
+           # self.grid()
+            #error.place(relx=0.5, y=500, anchor="center")
+            tk.Label(error, text='oops').pack()
+            error.tkraise()
 
 
 
