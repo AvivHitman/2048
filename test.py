@@ -58,11 +58,6 @@ class Game(tk.Frame):
         self.make_GUI()
         self.start_game()
 
-        self.master.bind("<Left>", self.left)
-        self.master.bind("<Right>", self.right)
-        self.master.bind("<Up>", self.up)
-        self.master.bind("<Down>", self.down)
-
 
     def make_GUI(self):
         # make grid
@@ -119,7 +114,8 @@ class Game(tk.Frame):
             font=c.CELL_NUMBER_FONTS[2],
             text="2")
         self.score = 0
-        self.matrix_undo = self.matrix
+        self.matrix_undo = []
+        self.matrix_undo.append(self.matrix)
         self.scor_undo = self.score
 
         # Matrix Manipulation Functions
@@ -191,7 +187,7 @@ class Game(tk.Frame):
         # Arrow-Press Functions
 
     def left(self):
-        self.matrix_undo = self.matrix
+        self.matrix_undo.append(self.matrix)
         self.scor_undo = self.score
         self.stack()
         self.combine()
@@ -201,7 +197,7 @@ class Game(tk.Frame):
         self.game_over()
 
     def right(self):
-        self.matrix_undo = self.matrix
+        self.matrix_undo.append(self.matrix)
         self.scor_undo = self.score
         self.reverse()
         self.stack()
@@ -213,7 +209,7 @@ class Game(tk.Frame):
         self.game_over()
 
     def up(self):
-        self.matrix_undo = self.matrix
+        self.matrix_undo.append(self.matrix)
         self.scor_undo = self.score
         self.transpose()
         self.stack()
@@ -225,7 +221,7 @@ class Game(tk.Frame):
         self.game_over()
 
     def down(self):
-        self.matrix_undo = self.matrix
+        self.matrix_undo.append(self.matrix)
         self.scor_undo = self.score
         self.transpose()
         self.reverse()
@@ -239,10 +235,11 @@ class Game(tk.Frame):
         self.game_over()
 
     def undo(self):
-        self.score = self.scor_undo
-        self.matrix = self.matrix_undo
-        self.update_GUI()
-        self.game_over()
+        if len(self.matrix_undo) > 1:
+            self.score = self.scor_undo
+            self.matrix = self.matrix_undo.pop()
+            self.update_GUI()
+            self.game_over()
 
         # Check if any moves are possible
 
@@ -288,6 +285,7 @@ class Welcome(tk.Frame):
     flag = 0
     newWindow = None
     def __init__(self, master):
+
         self.master = master
         self.frame = tk.Frame(self.master)
         self.master.title('2048')
@@ -296,32 +294,31 @@ class Welcome(tk.Frame):
             self, bg=c.GRID_COLOR, bd=5, width=400, height=400)
         self.main_grid.grid(pady=(0, 0))
         self.grid()
-        button1 = tk.Button(self, text='New Game',  command=lambda: self.new_window())
+        button1 = tk.Button(self, text='New Game', command=lambda: self.new_window())
         button1.grid(row=0, column=0, padx=10, pady=10)
         button1.config(height=2, width=15)
-
 
 
     def new_window(self):
         try:
             if (self.flag  == 0):
                 self.newWindow = tk.Toplevel(self.master)
-                frame = Game(self.newWindow, self)
-                frame.tkraise()
-
-
-        except:
-            print("ggg")
+            frame = Game(self.newWindow, self)
+            frame.tkraise()
             self.flag = 1
-            #self.newWindow = tk.Toplevel(self.master)
-            error = tk.Frame(self.new_window())
-           # self.grid()
-            #error.place(relx=0.5, y=500, anchor="center")
-            tk.Label(error, text='oops').pack()
-            error.tkraise()
+        except:
+            print("You cannot create another Singleton class")
+            text = tk.Label(self.master, bg=c.WARNING, text="You cannot open more then one game!")
+            text.grid(row=1, column=0, padx=0, pady=10)
+            text.config(height=2, width=40)
 
 
+def main():
+    root = tk.Tk()
+    app = Welcome(root)
+    root.mainloop()
 
-root = tk.Tk()
-app = Welcome(root)
-root.mainloop()
+
+if __name__ == "__main__":
+    main()
+

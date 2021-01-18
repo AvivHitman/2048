@@ -6,6 +6,7 @@ GAME_OVER_FONT = ("Helvetica", 48, "bold")
 GAME_OVER_FONT_COLOR = "#ffffff"
 WINNER_BG = "#ffcc00"
 LOSER_BG = "#a39489"
+WARNING = "#FADA5E"
 
 CELL_COLORS = {
     2: "#fcefe6",
