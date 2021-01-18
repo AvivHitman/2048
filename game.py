@@ -1,10 +1,7 @@
 import tkinter as tk
 from twenty import Game
-from tkinter import ttk
 import random
 import colors as c
-
-LARGEFONT = ("Verdana", 35)
 
 
 class Game(tk.Frame):
@@ -59,7 +56,6 @@ class Game(tk.Frame):
         self.make_GUI()
         self.start_game()
 
-
     def make_GUI(self):
         # make grid
         self.cells = []
@@ -88,7 +84,6 @@ class Game(tk.Frame):
             row=0, column=0)
         self.score_label = tk.Label(score_frame, text="0", font=c.SCORE_FONT)
         self.score_label.grid(row=1)
-
 
     def start_game(self):
         # create matrix of zeroes
@@ -280,46 +275,3 @@ class Game(tk.Frame):
                 bg=c.LOSER_BG,
                 fg=c.GAME_OVER_FONT_COLOR,
                 font=c.GAME_OVER_FONT).pack()
-
-
-class Welcome(tk.Frame):
-    flag = 0
-    newWindow = None
-    def __init__(self, master):
-
-        self.master = master
-        self.frame = tk.Frame(self.master)
-        self.master.title('2048')
-        tk.Frame.__init__(self)
-        self.main_grid = tk.Frame(
-            self, bg=c.GRID_COLOR, bd=5, width=400, height=400)
-        self.main_grid.grid(pady=(0, 0))
-        self.grid()
-        button1 = tk.Button(self, text='New Game', command=lambda: self.new_window())
-        button1.grid(row=0, column=0, padx=10, pady=10)
-        button1.config(height=2, width=15)
-
-
-    def new_window(self):
-        try:
-            if (self.flag  == 0):
-                self.newWindow = tk.Toplevel(self.master)
-            frame = Game(self.newWindow, self)
-            frame.tkraise()
-            self.flag = 1
-        except:
-            print("You cannot create another Singleton class")
-            text = tk.Label(self.master, bg=c.WARNING, text="You cannot open more then one game!")
-            text.grid(row=1, column=0, padx=0, pady=10)
-            text.config(height=2, width=40)
-
-
-def main():
-    root = tk.Tk()
-    app = Welcome(root)
-    root.mainloop()
-
-
-if __name__ == "__main__":
-    main()
-
