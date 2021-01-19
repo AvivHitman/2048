@@ -1,5 +1,4 @@
 import tkinter as tk
-from twenty import Game
 import random
 import colors as c
 
@@ -11,7 +10,7 @@ class Game(tk.Frame):
         if Game._instance is None:
             Game._instance = self
         else:
-            raise Exception("You cannot create another Singleton class")
+            raise Exception("You cannot create another Game !!!")
         self.score_undo = []
         self.matrix_undo = []
         tk.Frame.__init__(self, parent)
