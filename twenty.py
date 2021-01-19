@@ -81,6 +81,7 @@ class Game(tk.Frame):
             fg=c.CELL_NUMBER_COLORS[2],
             font=c.CELL_NUMBER_FONTS[2],
             text="2")
+
         self.score = 0
         self.matrix_undo =[]
         self.matrix_undo.append(self.matrix)

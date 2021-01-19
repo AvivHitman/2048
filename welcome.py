@@ -20,8 +20,13 @@ class Welcome(tk.Frame):
         button1.grid(row=0, column=0, padx=10, pady=10)
         button1.config(height=2, width=15)
 
+
+    def on_close(self):
+        self.destroy()
+
     def new_window(self):
         try:
+
             if (self.flag  == 0):
                 self.newWindow = tk.Toplevel(self.master)
             frame = Game(self.newWindow, self)
@@ -32,3 +37,5 @@ class Welcome(tk.Frame):
             text = tk.Label(self.master, bg=c.WARNING, text="You cannot open more then one game!")
             text.grid(row=1, column=0, padx=0, pady=10)
             text.config(height=2, width=40)
+
+        self.master.protocol("WM_DELETE_WINDOW", self.on_close())
